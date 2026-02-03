@@ -1,0 +1,61 @@
+* {
+    cursor: url("../img/point.png") 3 3, auto !important;
+}
+
+#circularcursor {
+    background-color: rgba(0,0,0,0.1);
+    height: 0;
+    width: 0;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(0, 0);
+    transition: background-color .2s, height .2s, width .2s, transform .2s;
+}
+
+#circularcursor.hover-a {
+    background-color: rgba(105, 102, 255, 0.678);
+    height: 50px;
+    width: 50px;
+    transition: background-color .2s, height .2s, width .2s;
+}
+
+#circularcursor.hover-sparrow-category {
+    background-color: rgba(255, 218, 218, 0.678);
+    height: 50px;
+    width: 50px;
+    transition: background-color .2s, height .2s, width .2s;
+}
+
+
+/* Label con text */
+
+#circularcursor.hover-label {
+    transform: translate(75px, -25px) rotate(-15deg);
+    transition: background-color .2s, height .2s, width .2s, transform .2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#circularcursor.hover-label::after {
+	padding: 10px 20px;
+    border-radius: 50px;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+
+    content: attr(data-cursor-txt);
+    font-size: 20px;
+    background: #C3CDFF;
+    white-space: nowrap;
+}
+
+@media screen and (max-width: 1024px){
+    #circularcursor {
+        display: none !important;
+    }
+}
