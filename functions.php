@@ -48,13 +48,15 @@ function hello_elementor_child_enqueue_scripts() {
 
     wp_register_script( 'sparrow-ajax-categories', get_stylesheet_directory_uri(  ) . "/assets/js/sparrow-ajax-categories.js", ['jquery', 'lazy-js'] );
 	wp_localize_script( 'sparrow-ajax-categories', 'ajax_categories', [
-		'ajaxurl' => admin_url( "admin-ajax.php" )
+		'ajaxurl' => admin_url( "admin-ajax.php" ),
+		'nonce' => wp_create_nonce( 'sparrow_ajax_nonce' )
 	] );
 	wp_enqueue_script( 'sparrow-ajax-categories' );
 
     wp_register_script( 'sparrow-products-loadmore', get_stylesheet_directory_uri(  ) . "/assets/js/sparrow-products-loadmore.js", ['jquery'] );
 	wp_localize_script( 'sparrow-products-loadmore', 'ajax_loadmore', [
-		'ajaxurl' => admin_url( "admin-ajax.php" )
+		'ajaxurl' => admin_url( "admin-ajax.php" ),
+		'nonce' => wp_create_nonce( 'sparrow_ajax_nonce' )
 	] );
 	wp_enqueue_script( 'sparrow-products-loadmore' );
 
@@ -663,12 +665,18 @@ add_image_size('sparrow_carousel', 600, 400);
 //LOAD MORE PRODUCTS
 
 function load_more_products() {
+    // Verify nonce
+    if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'sparrow_ajax_nonce' ) ) {
+        wp_send_json_error( 'Invalid nonce', 403 );
+        wp_die();
+    }
+
     global $wp_query;
 
-    $page = $_POST['page'];
-    $posts_per_page = $_POST['posts_per_page'];
-    $category = $_POST['category'];
-    $tag = $_POST['tag'];
+    $page = isset( $_POST['page'] ) ? absint( $_POST['page'] ) : 1;
+    $posts_per_page = isset( $_POST['posts_per_page'] ) ? absint( $_POST['posts_per_page'] ) : 9;
+    $category = isset( $_POST['category'] ) ? sanitize_text_field( $_POST['category'] ) : '';
+    $tag = isset( $_POST['tag'] ) ? sanitize_text_field( $_POST['tag'] ) : '';
 
     $tax_query = array(
         array(
@@ -735,11 +743,16 @@ add_action('wp_ajax_sparrow_category_data_fetch' , 'sparrow_category_data_fetch'
 add_action('wp_ajax_nopriv_sparrow_category_data_fetch','sparrow_category_data_fetch');
 
 function sparrow_category_data_fetch() {
-    
-    if ($_POST['pcat']) {
-        $product_cat_id = array(esc_attr( $_POST['pcat'] ));
-    }else {
-        $terms = get_terms( 'product_cat' ); 
+    // Verify nonce
+    if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'sparrow_ajax_nonce' ) ) {
+        wp_send_json_error( 'Invalid nonce', 403 );
+        wp_die();
+    }
+
+    if ( isset( $_POST['pcat'] ) && ! empty( $_POST['pcat'] ) ) {
+        $product_cat_id = array( absint( $_POST['pcat'] ) );
+    } else {
+        $terms = get_terms( 'product_cat' );
         $product_cat_id = wp_list_pluck( $terms, 'term_id' );
     }
 
@@ -781,8 +794,13 @@ add_action('wp_ajax_sparrow_tag_data_fetch' , 'sparrow_tag_data_fetch');
 add_action('wp_ajax_nopriv_sparrow_tag_data_fetch','sparrow_tag_data_fetch');
 
 function sparrow_tag_data_fetch() {
+    // Verify nonce
+    if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'sparrow_ajax_nonce' ) ) {
+        wp_send_json_error( 'Invalid nonce', 403 );
+        wp_die();
+    }
 
-    $product_tag_id = $_POST['ptag'] ? array(esc_attr( $_POST['ptag'] )) : false;
+    $product_tag_id = isset( $_POST['ptag'] ) && ! empty( $_POST['ptag'] ) ? array( sanitize_text_field( $_POST['ptag'] ) ) : false;
     $the_query = new WP_Query( 
         array( 
             'posts_per_page' => 9,
@@ -1016,7 +1034,7 @@ add_action( 'woocommerce_before_shop_loop_item_title', function() {
         $label = get_field('labels');
         if ($label) {
 	        echo "<p class='p__anim'>";
-            echo "<span class='shop__badge style__".strtolower($label)."'>$label! </span>";
+            echo "<span class='shop__badge style__" . esc_attr( strtolower( $label ) ) . "'>" . esc_html( $label ) . "! </span>";
 	        echo "</p>";
         }
 
