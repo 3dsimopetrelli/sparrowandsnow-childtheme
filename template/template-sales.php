@@ -51,8 +51,7 @@ Template Name: sales
 	<?php endif; ?>
 
 
-	ciao cazzo
-			<br>
+	<br>
 	<br>
 	<br>
 	<br>
@@ -87,28 +86,11 @@ if( have_rows('rip_sales_table') ):
 
 // No value.
 else :
-    // Do something...
-         echo " <br>"; 
-         echo " <br>"; 
-		 echo " Siamo nella merda"; 
+    // No data to display
 endif;
 		
 	?>	
 
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-		FINEEEE
-
-	
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	
 	</div><!-- .sas-container -->
 </div><!-- .page_wrap -->
 	

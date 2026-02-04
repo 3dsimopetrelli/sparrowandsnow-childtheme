@@ -26,7 +26,8 @@ jQuery(document).ready(function($) {
                         page: page,
                         posts_per_page: postsPerPage,
                         category: category,
-                        tag: tag
+                        tag: tag,
+                        nonce: ajax_loadmore.nonce
                     },
                     success: function(response) {
                         if (response) {

@@ -14,7 +14,7 @@ jQuery(document).ready(function($) {
         $.ajax({
             url: ajax_categories.ajaxurl,
             type: 'post',
-            data: { action: 'sparrow_category_data_fetch', pcat: $(this).attr("id") },
+            data: { action: 'sparrow_category_data_fetch', pcat: $(this).attr("id"), nonce: ajax_categories.nonce },
             dataType: 'json',
             success: function(data) {
                 $('.products').html( data.data );
@@ -65,7 +65,7 @@ jQuery(document).ready(function($) {
         $.ajax({
             url: ajax_categories.ajaxurl,
             type: 'post',
-            data: { action: 'sparrow_tag_data_fetch', ptag: $(this).attr("id") },
+            data: { action: 'sparrow_tag_data_fetch', ptag: $(this).attr("id"), nonce: ajax_categories.nonce },
             dataType: 'json',
             success: function(data) {
                 $('.products').html( data.data );
