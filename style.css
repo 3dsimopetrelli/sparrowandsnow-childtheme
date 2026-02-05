@@ -1565,8 +1565,11 @@ li.wc_payment_method label:before {
 
 /* Radio button checkout - bordo visibile */
 #payment ul.payment_methods li input[type="radio"]:not(old) + label:before {
-  -webkit-text-stroke: 3px #000;
-  text-stroke: 3px #000;
+  text-shadow:
+    -2px -2px 0 #000,
+    2px -2px 0 #000,
+    -2px 2px 0 #000,
+    2px 2px 0 #000;
 }
 
 #add_payment_method #payment ul.payment_methods li input, .woocommerce-cart #payment ul.payment_methods li input, .woocommerce-checkout #payment ul.payment_methods li input {
