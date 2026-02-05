@@ -658,7 +658,27 @@ function indie_change_cross_sells_product_no( $columns ) {
 return 3;
 }
 
-add_image_size('sparrow_carousel', 600, 400);
+// =============================================
+// RIMUOVI TAGLI IMMAGINE INUTILI
+// =============================================
+
+// Rimuovi tagli custom non utilizzati
+add_action('init', function() {
+    // Rimuovi tagli Qi Addons for Elementor (non utilizzati)
+    remove_image_size('qi_addons_for_elementor_image_size_square');
+    remove_image_size('qi_addons_for_elementor_image_size_landscape');
+    remove_image_size('qi_addons_for_elementor_image_size_portrait');
+    remove_image_size('qi_addons_for_elementor_image_size_huge-square');
+}, 99);
+
+// Blocca generazione tagli WordPress 5.3+ (1536x1536, 2048x2048)
+add_filter('big_image_size_threshold', '__return_false');
+
+// Rimuovi medium_large (768px) - raramente utilizzato
+add_filter('intermediate_image_sizes_advanced', function($sizes) {
+    unset($sizes['medium_large']);
+    return $sizes;
+});
 
 
 
