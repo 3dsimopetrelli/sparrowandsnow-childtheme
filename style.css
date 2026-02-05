@@ -1563,6 +1563,12 @@ li.wc_payment_method label:before {
   margin-left: 0px !important;
 }
 
+/* Radio button checkout - bordo visibile */
+#payment ul.payment_methods li input[type="radio"]:not(old) + label:before {
+  -webkit-text-stroke: 3px #000;
+  text-stroke: 3px #000;
+}
+
 #add_payment_method #payment ul.payment_methods li input, .woocommerce-cart #payment ul.payment_methods li input, .woocommerce-checkout #payment ul.payment_methods li input {
     margin: 0;
     padding-bottom: 30px;
@@ -1870,7 +1876,7 @@ label[for="payment_method_paypal"] img {
 #add_payment_method #payment ul.payment_methods li img.stripe-icon {
   float: right;
   max-width: 35px;
-  margin-top: 8px !important;
+  margin-top: 0 !important;
 }
 .woocommerce-checkout
   #payment
