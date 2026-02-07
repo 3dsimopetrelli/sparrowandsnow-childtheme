@@ -64,5 +64,10 @@ jQuery(document).ready(function($) {
       $('#circularcursor.hover-label::after').css("background-color", ""); //Rimuove background color
     });
 
+    // Apply cursor hover attributes to WooCommerce add-to-cart buttons
+    $('.single_add_to_cart_button').attr({
+      'data-cursor-hover': 'true',
+      'data-cursor-hover-background': 'rgba(105,102,255,0.678)'
+    });
 
 });
